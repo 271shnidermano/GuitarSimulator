@@ -52,24 +52,24 @@ public class RingBuffer
     
     public double peek()
     {
-        if (isEmpty())
-        {
-            throw new RingBufferOverflowException("Queue is empty");
-        }
-        else
-        {
-            return ringBuffer[indexStart];
-        }
+        return ringBuffer[indexStart];
+        // if (isEmpty())
+        // {
+        //     throw new RingBufferUnderflowException("Ringbuffer is empty");
+        // }
+        // else
+        // {
+        //     return ringBuffer[indexStart];
+        // }
     }
     
     public double remove()
     {
-        if(isEmpty())
+       /* if(isEmpty())
         {
             throw new RingBufferUnderflowException("Queue is Empty");
         }
-        else
-        {
+        else*/
             double pushed = ringBuffer[indexStart];
             ringBuffer[indexStart] = 0.0;
             size--;
@@ -91,7 +91,7 @@ public class RingBuffer
                 indexEnd = 0;
             }
             return pushed;
-        }
+
     }
     
     // a simple test of the constructor and methods in RingBuffer
