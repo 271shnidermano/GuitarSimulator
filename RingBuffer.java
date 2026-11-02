@@ -34,64 +34,24 @@ public class RingBuffer
     
     public void add(double value)
     {
-        if (size == ringBuffer.length)
-        {
-            throw new RingBufferOverflowException("Ring Buffer is Full");
-        }
-        ringBuffer[indexEnd]=value;
-        if (indexEnd == ringBuffer.length - 1)
-        {
-            indexEnd = 0;
-        }
-        else
-        {
-            indexEnd++;
-        }
+    
+        ringBuffer[indexEnd] = value;
+        indexEnd = (indexEnd + 1) % ringBuffer.length;
         size++;
     }
-    
     public double peek()
     {
         return ringBuffer[indexStart];
-        // if (isEmpty())
-        // {
-        //     throw new RingBufferUnderflowException("Ringbuffer is empty");
-        // }
-        // else
-        // {
-        //     return ringBuffer[indexStart];
-        // }
     }
     
     public double remove()
     {
-       /* if(isEmpty())
-        {
-            throw new RingBufferUnderflowException("Queue is Empty");
-        }
-        else*/
-            double pushed = ringBuffer[indexStart];
-            ringBuffer[indexStart] = 0.0;
-            size--;
+        double value = ringBuffer[indexStart];
 
-            if (size > 0)
-            {
-                if (indexStart == ringBuffer.length - 1)
-                {
-                    indexStart = 0;
-                }
-                else
-                {
-                    indexStart++;
-                }
-            }
-            else
-            {
-                indexStart = 0;
-                indexEnd = 0;
-            }
-            return pushed;
+        indexStart = (indexStart + 1) % ringBuffer.length;
+        size--;
 
+        return value;
     }
     
     // a simple test of the constructor and methods in RingBuffer

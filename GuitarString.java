@@ -4,63 +4,70 @@
  * @author  
  * @version 
  */
-public class GuitarString 
+public class GuitarString
 {
     private RingBuffer ringBuffer;
-    private int ticTimes=0;
-    public GuitarString(double frequency) 
-    {
-        ringBuffer = new RingBuffer((int)(44100/frequency));
+    private int time;
 
-    }
-
-    public GuitarString(double[] array) 
+    public GuitarString(double frequency)
     {
-        ringBuffer = new RingBuffer(array.length);
-        for(double val : array)
+        int capacity = (int)(44100 / frequency);
+
+        ringBuffer = new RingBuffer(capacity);
+        time = 0;
+
+        // Fill the buffer with zeros
+        for (int i = 0; i < capacity; i++)
         {
-            ringBuffer.add(val);
+            ringBuffer.add(0.0);
         }
     }
 
-    public void pluck() 
+    public GuitarString(double[] init)
     {
-        while(!ringBuffer.isFull())
+        ringBuffer = new RingBuffer(init.length);
+        time = 0;
+
+        for (int i = 0; i < init.length; i++)
         {
-            ringBuffer.add(((Math.random() * Math.nextUp(1.0)) - 0.5)); //gemini
+            ringBuffer.add(init[i]);
         }
     }
 
-    // advance the simulation one time step
-    public void tic() 
+    public void pluck()
+    {
+        // Empty the buffer
+        while (!ringBuffer.isEmpty())
+        {
+            ringBuffer.remove();
+        }
+
+        // Fill it with random values
+        while (!ringBuffer.isFull())
+        {
+            double randomValue = Math.random() - 0.5;
+            ringBuffer.add(randomValue);
+        }
+    }
+
+    public void tic()
     {
         double first = ringBuffer.remove();
-        ringBuffer.add(((first+ringBuffer.peek())/2.0)*0.994);
-        ticTimes++;
+
+        double average = (first + ringBuffer.peek()) / 2.0;
+
+        ringBuffer.add(average * 0.994);
+
+        time++;
     }
 
-    // return the current sample
-    public double sample() 
+    public double sample()
     {
         return ringBuffer.peek();
     }
 
-    // return number of times tic was called
-    public int time() 
+    public int time()
     {
-        return ticTimes;
-    }
-
-    public static void main(String[] args) 
-    {
-        double[] samples = { .2, .4, .5, .3, -.2, .4, .3, .0, -.1, -.3 };  
-        GuitarString testString = new GuitarString(samples);
-        for (int i = 0; i < 25; i++) 
-        {
-            int t = testString.time();
-            double sample = testString.sample();
-            System.out.printf("%6d %8.4f\n", t, sample);
-            testString.tic();
-        }
+        return time;
     }
 }
