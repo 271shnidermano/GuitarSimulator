@@ -16,7 +16,6 @@ public class GuitarString
         ringBuffer = new RingBuffer(capacity);
         time = 0;
 
-        // Fill the buffer with zeros
         for (int i = 0; i < capacity; i++)
         {
             ringBuffer.add(0.0);
@@ -36,13 +35,11 @@ public class GuitarString
 
     public void pluck()
     {
-        // Empty the buffer
         while (!ringBuffer.isEmpty())
         {
             ringBuffer.remove();
         }
 
-        // Fill it with random values
         while (!ringBuffer.isFull())
         {
             double randomValue = Math.random() - 0.5;
