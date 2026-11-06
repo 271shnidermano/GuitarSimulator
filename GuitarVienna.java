@@ -6,7 +6,6 @@ public class GuitarVienna
 
         GuitarString[] strings = new GuitarString[37];
 
-        // Create all 37 guitar strings
         for (int i = 0; i < strings.length; i++)
         {
             double frequency = 440.0 * Math.pow(1.05956, i - 24);
@@ -27,13 +26,9 @@ public class GuitarVienna
 
         while (count < vienna.length)
         {
-            // Check if any key has been pressed
             if (StdDraw.hasNextKeyTyped())
             {
-                // Get the pressed key
                 StdDraw.nextKeyTyped();
-
-                // Play the next note or chord
                 for (int i = 0; i < vienna[count].length(); i++)
                 {
                     char key = vienna[count].charAt(i);
@@ -48,26 +43,18 @@ public class GuitarVienna
 
                 count++;
             }
-
-            // Combine all the string samples
             double sample = 0.0;
-
             for (int i = 0; i < strings.length; i++)
             {
                 sample += strings[i].sample();
             }
-
-            // Play the combined sound
             StdAudio.play(sample);
-
-            // Advance all strings
             for (int i = 0; i < strings.length; i++)
             {
                 strings[i].tic();
             }
         }
 
-        // Continue playing the final note after the song entries end
         while (true)
         {
             double sample = 0.0;
